@@ -32,6 +32,7 @@ router.get(
     });
   }
 ); 
+
 router.post(
   "/criar-tecnico",
   authMiddleware,
