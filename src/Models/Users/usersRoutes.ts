@@ -4,6 +4,7 @@ import { loginUsersControllers } from "./Login/loginUsersControllers";
 import { authMiddleware } from "../../Shared/Middlewares/authMiddleware";
 import { authorizeRoles } from "../../Shared/Middlewares/roleMiddleware";
 import { UserRole } from "../../Shared/enums/UserRole";
+import { UsersService } from "./usersServices";
 
 
 
@@ -31,4 +32,11 @@ router.get(
     });
   }
 ); 
+router.post(
+  "/criar-tecnico",
+  authMiddleware,
+  authorizeRoles(UserRole.ADMIN),
+  (req, res) => usersController.registrarUsuarioTecnico(req, res)
+); 
+
 export default router;
