@@ -30,4 +30,19 @@ export class UsersController {
         //;
 }
 
+async registrarUsuarioTecnico(req: Request, res: Response): Promise<Response> {
+    try {
+      const { nome, email, senha } = req.body;
+      const usuarioTecnico = await this.usersService.registrarUsuarioTecnico({
+        nome,
+        email,
+        senha
+      });
+      return res.status(201).json(usuarioTecnico);
+    } catch (error: any) {
+      return res.status(400).json({
+        message: error.message || "Erro ao registrar usuário técnico"
+      });
+    }
+}
 }

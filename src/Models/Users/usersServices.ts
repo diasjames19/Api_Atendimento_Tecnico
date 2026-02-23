@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import { UsersRepository } from "./usersRepository";
 import { UserRole } from "../../Shared/enums/UserRole";
 import jwt from "jsonwebtoken";
-import IUsersDTO from "./Interfaces/IUsers";
 import { IRegisterUserDTO } from "./Interfaces/IRegisterUserDTO";
 import { IUserResponseDTO } from "./Interfaces/IUserResponseDTO";
 import { ILoginDTO } from "./Interfaces/ILoginDTO";
@@ -84,4 +83,27 @@ export class UsersService {
     }
 }
 
+async registrarUsuarioTecnico(data: IRegisterUserDTO): Promise<IUserResponseDTO> {
+        const userExists = await this.usersRepository.findByEmail(data.email);
+    if(userExists){
+        throw new Error("Usuário já existe");
+    }
+
+    const senhaSegura = await bcrypt.hash(data.senha, 10);
+    const novoUsuarioTecnico = await this.usersRepository.create({
+        
+        nome: data.nome,
+        email: data.email,
+        senha: senhaSegura,
+        role: UserRole.TECNICO
+
+});
+return {
+        id: novoUsuarioTecnico.id,
+        nome: novoUsuarioTecnico.nome,  
+        email: novoUsuarioTecnico.email,
+        role: novoUsuarioTecnico.role
+  }
+
+}
 }
